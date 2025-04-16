@@ -14,10 +14,7 @@ class BrowserPool {
       return this.browser;
     }
 
-    this.browser = await puppeteer.launch({
-      executablePath: "/usr/bin/microsoft-edge",
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    });
+    this.browser = await puppeteer.launch();
     return this.browser;
   }
 
