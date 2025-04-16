@@ -1,4 +1,9 @@
 import puppeteer, { Browser, Page } from "puppeteer";
+import chromium from "@sparticuz/chromium-min";
+
+export const dynamic = `force-dynamic`;
+
+const remoteExecutablePath = `https://github.com/Sparticuz/chromium/releases/download/v121.0.0/chromium-v121.0.0-pack.tar`;
 
 class BrowserPool {
   private browser: Browser | undefined;
@@ -14,7 +19,18 @@ class BrowserPool {
       return this.browser;
     }
 
-    this.browser = await puppeteer.launch();
+    if (process.env.NEXT_PUBLIC_VERCEL_ENVIRONMENT === "production") {
+      this.browser = await puppeteer.launch({
+        args: chromium.args,
+        executablePath: await chromium.executablePath(remoteExecutablePath),
+        headless: true,
+      });
+    } else {
+      this.browser = await puppeteer.launch({
+        headless: true,
+        args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      });
+    }
     return this.browser;
   }
 
