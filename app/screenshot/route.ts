@@ -9,7 +9,7 @@ export async function POST(request: Request) {
   try {
     await page.setViewport({ width, height, deviceScaleFactor });
     await page.goto(url, {
-      waitUntil: "networkidle2",
+      waitUntil: "networkidle0",
     });
     image = await page.screenshot({
       type: "png",
