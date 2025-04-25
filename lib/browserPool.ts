@@ -19,24 +19,19 @@ class BrowserPool {
       return this.browser;
     }
 
-    this.browser = await puppeteer.launch({
-      args: chromium.args,
-      executablePath: await chromium.executablePath(remoteExecutablePath),
-      headless: true,
-    });
-
-    // if (process.env.NEXT_PUBLIC_VERCEL_ENVIRONMENT === "production") {
-    //   this.browser = await puppeteer.launch({
-    //     args: chromium.args,
-    //     executablePath: await chromium.executablePath(remoteExecutablePath),
-    //     headless: true,
-    //   });
-    // } else {
-    //   this.browser = await puppeteer.launch({
-    //     headless: true,
-    //     args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    //   });
-    // }
+    if (process.env.NEXT_PUBLIC_VERCEL_ENVIRONMENT === "production") {
+      this.browser = await puppeteer.launch({
+        args: chromium.args,
+        executablePath: await chromium.executablePath(remoteExecutablePath),
+        headless: true,
+      });
+    } else {
+      this.browser = await puppeteer.launch({
+        headless: true,
+        executablePath: "/snap/brave/498/opt/brave.com/brave/brave",
+        args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      });
+    }
     return this.browser;
   }
 
